@@ -14,5 +14,5 @@ module.exports = {
   rules: {
     // Custom rules
   },
-  ignorePatterns: [], // Ensure this is not ignoring your files
+  ignorePatterns: [node_moudules, dist], // Ensure this is not ignoring your files
 };

@@ -1,8 +1,16 @@
-import express from 'express';
 
-const app = express();
-const PORT = 4000;
+import { initServer } from './app';
 
-app.listen(PORT, () => {
-  console.log(`-Local:        http://localhost:${PORT}`);
-});
+
+async function init(){
+  const app = await initServer();
+  const PORT = 8000;
+  
+  app.listen(PORT, () => {
+    console.log(`-Local:        http://localhost:${PORT}`);
+  });
+}
+
+
+init();
+
