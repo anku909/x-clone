@@ -6,6 +6,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { BiMessageRounded, BiUpload } from "react-icons/bi";
 import { FaRetweet } from "react-icons/fa";
 
+
 export const FeedCard: React.FC = () => {
   return (
     <>
