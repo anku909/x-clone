@@ -36,7 +36,7 @@ export const queries = {
       const googleOauthURL = new URL('https://oauth2.googleapis.com/tokeninfo')
       googleOauthURL.searchParams.set('id_token', googleToken);
 
-      const { data } = await axios.get<GoogleTokenResult>(googleOauthURL.toString(), {
+      const { data } = await axios.get<GoogleTokenResult> (googleOauthURL.toString(), {
         responseType: 'json'
       })
 
