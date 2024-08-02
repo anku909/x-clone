@@ -2,6 +2,8 @@ import axios from "axios";
 import { prismaClient } from "../../clients/db";
 import JWTService from "../../services/jwt"
 import { GoogleTokenResult, GraphQLContext } from "interfaces/_graphql/gql_interfaces";
+import { UserData } from "interfaces/_prisma/_interfaces";
+
 
 
 
@@ -22,17 +24,17 @@ export const queries = {
         responseType: 'json'
       })
 
-      const user = await prismaClient.user.findUnique({
+      const user: UserData | null = await prismaClient.user.findUnique({
         where: {email: data.email},
       })
 
       if (!user){
           await prismaClient.user.create({
             data: {
-              email: data.email,
-              firstName: data.given_name,
-              lastName: data.family_name,
-              profileImageUrl: data.picture
+              email:  data.email!,
+              firstName: data.given_name!,
+              lastName: data.family_name!,
+              profileImageUrl: data.picture!
             },
           });
       }
@@ -42,20 +44,17 @@ export const queries = {
       if (!userInDB) throw new Error("user with email not found!");
 
       const userToken = JWTService.generateTokenForUser(userInDB)
-
-      console.log(userToken);
       
       return userToken
   },
 
-  getCurrentUser: async(paret: any, args: any, ctx: GraphQLContext) => {
+  getCurrentUser: async(parent: any, args: any, ctx: GraphQLContext) => {    
     const id = ctx.user?.id;
-    console.log(ctx.user);
-    if(!id) return null  
+    if(!id) return null ;   
     
     const user = await prismaClient.user.findUnique({where: {id}})
     return user;
-  }
+  } 
 };
 
 export const resolvers = { queries };

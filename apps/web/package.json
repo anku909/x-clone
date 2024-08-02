@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
+    "@tanstack/react-query": "^5.51.15",
     "graphql": "^16.9.0",
     "graphql-request": "^7.1.0",
     "next": "14.2.5",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.2",
     "@graphql-codegen/introspection": "4.0.3",
+    "@tanstack/react-query-devtools": "^5.51.18",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

@@ -34,23 +34,42 @@ export async function initServer() {
   });
 
   await graphqlServer.start();
-
+  
   app.use(
     '/graphql',
     expressMiddleware(graphqlServer, {
       context: async ({ req, res }) => {
-        const authToken = req.headers.authorization;
+        const authHeader = req.headers.authorization;
         let user;
-        user = authToken?.startsWith('Bearer ')
-          ? JWTService.decodeToken(authToken.split('Bearer ')[1])
-          : JWTService.decodeToken(authToken as string);
-
-        return {
-          user,
-        };
+  
+        if (authHeader) {
+          
+          try {
+            if (authHeader.startsWith("Bearer ")) {
+              const token = authHeader.split("Bearer ")[1];
+              user = JWTService.decodeToken(token);      
+              
+            } else {
+              user = JWTService.decodeToken(authHeader);
+              
+              
+            }
+          } catch (error) {
+            console.error("Failed to decode token:", error);
+            // Return a context indicating authentication failure
+            return { user: null };
+          }
+        } else {
+          // No authorization header provided
+          return { user: null };
+        }
+  
+        return { user };
       },
     })
   );
+  
+  
 
   return app;
 }
