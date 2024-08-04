@@ -5,6 +5,7 @@ import {
   BiBookmark,
   BiHash,
   BiHomeCircle,
+  BiImageAlt,
   BiMessage,
   BiMoney,
   BiNotification,
@@ -81,6 +82,13 @@ export default function Home() {
     [queryclient]
   );
 
+  const handleSelectImg = useCallback(()=> {
+    const input = document.createElement('input')
+    input.setAttribute('type', 'file')
+    input.setAttribute('accept', "image/*")
+    input.click();
+  }, [])
+
   return (
     <>
       <div className="grid grid-cols-12 h-screen w-screen px-56">
@@ -119,12 +127,44 @@ export default function Home() {
                 />
               )}
               <div>
-              <h3 className="text-lg">{user.firstName} {user.lastName}</h3>
+                <h3 className="text-lg">
+                  {user.firstName} {user.lastName}
+                </h3>
               </div>
             </div>
           )}
         </div>
         <div className="h-screen overflow-y-scroll col-span-5 border-x-[0.2px] border-gray-600">
+          <div className="test">
+            <div className="border-t border-b-0 border-gray-600 p-5 hover:bg-slate-900 transition-all cursor-pointer">
+              <div className="grid grid-cols-12 gap-3">
+                <div className="col-span-1">
+                  {user?.profileImageUrl && (
+                    <Image
+                      className="rounded-full"
+                      src={user?.profileImageUrl}
+                      alt="user-image"
+                      height={50}
+                      width={50}
+                    />
+                  )}
+                </div>
+                <div className="col-span-11">
+                  <textarea
+                    className="w-full bg-transparent text-xl px-3 border-b border-slate-700"
+                    rows={3}
+                    placeholder="what's happening?"
+                  ></textarea>
+                  <div className="mt-2 flex justify-between items-center">
+                    <BiImageAlt onClick={handleSelectImg} className="text-2xl" />
+                    <button className="text-sm font-semibold bg-[#1d9bf0] rounded-full px-4 py-1">
+                      Tweet
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <FeedCard />
           <FeedCard />
           <FeedCard />
