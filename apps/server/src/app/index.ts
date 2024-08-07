@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 import { User } from './user';
+import { Tweet } from './tweet';
 
 import JWTService from '../services/jwt';
 import { GraphQLContext } from 'interfaces/_graphql/gql_interfaces';
@@ -19,10 +20,15 @@ export async function initServer() {
     typeDefs: `
 
       ${User.types}
+      ${Tweet.types}
 
         type Query {
             ${User.queries}
-        }       
+        }        
+        
+        type Mutation {
+          ${Tweet.mutations}
+        }
          
         `,
 
@@ -30,32 +36,32 @@ export async function initServer() {
       Query: {
         ...User.resolvers.queries,
       },
+
+      Mutation: {
+        ...Tweet.resolvers.mutations,
+      }
     },
   });
 
   await graphqlServer.start();
-  
+
   app.use(
     '/graphql',
     expressMiddleware(graphqlServer, {
       context: async ({ req, res }) => {
         const authHeader = req.headers.authorization;
         let user;
-  
+
         if (authHeader) {
-          
           try {
-            if (authHeader.startsWith("Bearer ")) {
-              const token = authHeader.split("Bearer ")[1];
-              user = JWTService.decodeToken(token);      
-              
+            if (authHeader.startsWith('Bearer ')) {
+              const token = authHeader.split('Bearer ')[1];
+              user = JWTService.decodeToken(token);
             } else {
               user = JWTService.decodeToken(authHeader);
-              
-              
             }
           } catch (error) {
-            console.error("Failed to decode token:", error);
+            console.error('Failed to decode token:', error);
             // Return a context indicating authentication failure
             return { user: null };
           }
@@ -63,13 +69,11 @@ export async function initServer() {
           // No authorization header provided
           return { user: null };
         }
-  
+
         return { user };
       },
     })
   );
-  
-  
 
   return app;
 }
